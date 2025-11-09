@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-blue-600">
+                            <i class="fas fa-truck mr-2"></i>Lalalika Logistics
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/about" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Login Form (shown when not authenticated) -->
+            <div id="login-section" data-no-auth-required>
+                <div>
+                    <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-blue-100">
+                        <i class="fas fa-shield-alt text-blue-600 text-xl"></i>
+                    </div>
+                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        Admin Access
+                    </h2>
+                    <p class="mt-2 text-center text-sm text-gray-600">
+                        Sign in to access the admin dashboard
+                    </p>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="admin-form" class="mt-8 space-y-6">
+                    <div class="rounded-md shadow-sm -space-y-px">
+                        <div>
+                            <label for="admin-email" class="sr-only">Email address</label>
+                            <input id="admin-email" name="email" type="email" autocomplete="email" required 
+                                   class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                                   placeholder="Email address">
+                        </div>
+                        <div class="relative">
+                            <label for="admin-password" class="sr-only">Password</label>
+                            <input id="admin-password" name="password" type="password" autocomplete="current-password" required 
+                                   class="appearance-none rounded-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                                   placeholder="Password">
+                            <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                <i class="fas fa-lock text-blue-500 group-hover:text-blue-400"></i>
+                            </span>
+                            Sign in with Email
+                        </button>
+                        
+                        <button type="button" id="google-signin-btn" class="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                <i class="fab fa-google text-red-500 group-hover:text-red-400"></i>
+                            </span>
+                            Sign in with Google
+                        </button>
+                    </div>
+
+                    <!-- Forgot Password & Driver Registration Links -->
+                    <div class="flex items-center justify-between text-sm">
+                        <button type="button" id="forgot-password-btn" class="text-blue-600 hover:text-blue-500">
+                            Forgot your password?
+                        </button>
+                        <a href="/driver-register" class="text-blue-600 hover:text-blue-500">
+                            Driver Registration
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Forgot Password Form (hidden by default) -->
+                <form id="forgot-password-form" class="mt-8 space-y-6 hidden">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 text-center mb-4">Reset Password</h3>
+                        <div class="rounded-md shadow-sm">
+                            <input id="reset-email" name="email" type="email" required 
+                                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                                   placeholder="Enter your email address">
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium">
+                            Send Reset Email
+                        </button>
+                        <button type="button" id="cancel-reset-btn" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-md text-sm font-medium">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Security Features -->
+                <div class="mt-8 bg-gray-50 rounded-lg p-4">
+                    <h3 class="text-sm font-medium text-gray-900 mb-2">Security Features</h3>
+                    <ul class="text-xs text-gray-600 space-y-1">
+                        <li><i class="fas fa-check text-green-500 mr-1"></i> Two-factor authentication</li>
+                        <li><i class="fas fa-check text-green-500 mr-1"></i> Session timeout protection</li>
+                        <li><i class="fas fa-check text-green-500 mr-1"></i> Encrypted data transmission</li>
+                        <li><i class="fas fa-check text-green-500 mr-1"></i> Activity logging</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dashboard Preview (shown when authenticated) -->
+            <div id="dashboard-section" data-auth-required style="display: none;">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Admin Dashboard</h2>
+                        <button id="sign-out-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                        </button>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="text-gray-600">Welcome back, <span data-user-email class="font-semibold"></span></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-blue-900 mb-2">
+                                <i class="fas fa-boxes mr-2"></i>Shipment Management
+                            </h3>
+                            <p class="text-blue-700 text-sm mb-3">Manage active shipments and tracking updates</p>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
+                                View Shipments
+                            </button>
+                        </div>
+
+                        <div class="bg-green-50 rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-green-900 mb-2">
+                                <i class="fas fa-newspaper mr-2"></i>News Management
+                            </h3>
+                            <p class="text-green-700 text-sm mb-3">Create and manage news posts and alerts</p>
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm">
+                                Manage News
+                            </button>
+                        </div>
+
+                        <div class="bg-yellow-50 rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-yellow-900 mb-2">
+                                <i class="fas fa-envelope mr-2"></i>Contact Messages
+                            </h3>
+                            <p class="text-yellow-700 text-sm mb-3">Review and respond to customer inquiries</p>
+                            <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded text-sm">
+                                View Messages
+                            </button>
+                        </div>
+
+                        <div class="bg-purple-50 rounded-lg p-4">
+                            <h3 class="text-lg font-semibold text-purple-900 mb-2">
+                                <i class="fas fa-chart-bar mr-2"></i>Analytics
+                            </h3>
+                            <p class="text-purple-700 text-sm mb-3">View website and shipment analytics</p>
+                            <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded text-sm">
+                                View Analytics
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-chart-line mr-2 text-blue-600"></i>Quick Stats
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-blue-50 rounded-lg p-4 text-center border-l-4 border-blue-500">
+                                <div class="text-3xl font-bold text-blue-600 mb-1" id="activeShipments">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                                <div class="text-sm font-medium text-blue-700">Active Shipments</div>
+                                <div class="text-xs text-blue-600 mt-1">Currently being tracked</div>
+                            </div>
+                            <div class="bg-green-50 rounded-lg p-4 text-center border-l-4 border-green-500">
+                                <div class="text-3xl font-bold text-green-600 mb-1" id="newMessages">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                                <div class="text-sm font-medium text-green-700">New Messages</div>
+                                <div class="text-xs text-green-600 mt-1">Pending responses</div>
+                            </div>
+                            <div class="bg-purple-50 rounded-lg p-4 text-center border-l-4 border-purple-500">
+                                <div class="text-3xl font-bold text-purple-600 mb-1" id="recentNews">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                                <div class="text-sm font-medium text-purple-700">Recent News</div>
+                                <div class="text-xs text-purple-600 mt-1">Published articles</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Simple admin interface with mock data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show dashboard by default (you might want to add authentication later)
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'block';
+
+            // Load sample data
+            loadSampleData();
+
+            // Sign out button
+            const signOutBtn = document.getElementById('sign-out-btn');
+            if (signOutBtn) {
+                signOutBtn.addEventListener('click', () => {
+                    // Redirect to home page
+                    window.location.href = 'index.html';
+                });
+            }
+
+            // Toggle password visibility
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.getElementById('password-toggle');
+            
+            if (passwordToggle && passwordInput) {
+                passwordToggle.addEventListener('click', () => {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    const icon = passwordToggle.querySelector('i');
+                    if (type === 'password') {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    } else {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    }
+                });
+            }
+
+            // Load sample data function
+            function loadSampleData() {
+                try {
+                    // Sample data - you can replace this with your actual data source
+                    const sampleData = {
+                        totalUsers: 150,
+                        totalDrivers: 45,
+                        totalAdmins: 3
+                    };
+
+                    // Update the UI with sample data
+                    const totalUsersEl = document.getElementById('total-users');
+                    const totalDriversEl = document.getElementById('total-drivers');
+                    const totalAdminsEl = document.getElementById('total-admins');
+
+                    if (totalUsersEl) totalUsersEl.textContent = sampleData.totalUsers;
+                    if (totalDriversEl) totalDriversEl.textContent = sampleData.totalDrivers;
+                    if (totalAdminsEl) totalAdminsEl.textContent = sampleData.totalAdmins;
+
+                } catch (error) {
+                    console.error('Error loading sample data:', error);
+                    showMessage('Error loading data', 'error');
+                }
+            }
+
+            // Message display function
+            function showMessage(message, type = 'success') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                    type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                }`;
+                messageDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                        <span>${message}</span>
+                        <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                document.body.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

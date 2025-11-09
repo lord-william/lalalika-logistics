@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Auth Test - Lalalika Logistics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .user-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Firebase Authentication Test</h1>
+        <p>Testing Firebase Auth integration with Lalalika Logistics</p>
+
+        <div class="section">
+            <h3>📊 Connection Status</h3>
+            <div id="status" class="status info">Initializing Firebase...</div>
+        </div>
+
+        <div class="section">
+            <h3>👤 Current User</h3>
+            <div id="userInfo" class="user-info">
+                <p>Not signed in</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>🔑 Sign In Test</h3>
+            <input type="email" id="email" placeholder="Email address" value="manager@lalalika.co.za">
+            <input type="password" id="password" placeholder="Password" value="password123">
+            <br>
+            <button onclick="signIn()">Sign In with Email</button>
+            <button onclick="signInWithGoogle()">🔍 Sign In with Google</button>
+            <button onclick="createAccount()">Create Account</button>
+            <button onclick="signOut()">Sign Out</button>
+            <button onclick="resetPassword()">Reset Password</button>
+        </div>
+
+        <div class="section">
+            <h3>🧪 Test Users</h3>
+            <p>Click to quickly test with predefined users:</p>
+            <button onclick="testUser('manager@lalalika.co.za', 'password123')">Manager</button>
+            <button onclick="testUser('courier1@lalalika.co.za', 'password123')">Courier</button>
+            <button onclick="testUser('staff1@lalalika.co.za', 'password123')">Staff</button>
+            <button onclick="testUser('customer1@gmail.com', 'password123')">Customer</button>
+        </div>
+
+        <div class="section">
+            <h3>🔍 Debug Information</h3>
+            <pre id="debug"></pre>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+
+        // Firebase configuration (Updated to working project)
+        const firebaseConfig = {
+            apiKey: "AIzaSyACLtqSKjefB_AERpwynb9ugPNO_Iopojc",
+            authDomain: "lalalika-project.firebaseapp.com",
+            projectId: "lalalika-project",
+            storageBucket: "lalalika-project.firebasestorage.app",
+            messagingSenderId: "1043149018553",
+            appId: "1:1043149018553:web:af77616925ef95d7439268",
+            measurementId: "G-P77J7G855K"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Status elements
+        const statusEl = document.getElementById('status');
+        const userInfoEl = document.getElementById('userInfo');
+        const debugEl = document.getElementById('debug');
+
+        // Update status
+        function updateStatus(message, type = 'info') {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+
+        // Update debug info
+        function updateDebug(info) {
+            debugEl.textContent = JSON.stringify(info, null, 2);
+        }
+
+        // Authentication state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                updateStatus('✅ User signed in successfully', 'success');
+                userInfoEl.innerHTML = `
+                    <strong>Signed in as:</strong><br>
+                    <strong>UID:</strong> ${user.uid}<br>
+                    <strong>Email:</strong> ${user.email}<br>
+                    <strong>Display Name:</strong> ${user.displayName || 'Not set'}<br>
+                    <strong>Email Verified:</strong> ${user.emailVerified}<br>
+                    <strong>Created:</strong> ${new Date(user.metadata.creationTime).toLocaleString()}
+                `;
+                
+                // Get ID token
+                user.getIdToken().then(token => {
+                    updateDebug({
+                        user: {
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName,
+                            emailVerified: user.emailVerified
+                        },
+                        token: token.substring(0, 50) + '...',
+                        config: firebaseConfig
+                    });
+                });
+            } else {
+                updateStatus('❌ No user signed in', 'error');
+                userInfoEl.innerHTML = '<p>Not signed in</p>';
+                updateDebug({ user: null, config: firebaseConfig });
+            }
+        });
+
+        // Sign in with email function
+        window.signIn = async function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                updateStatus('Please enter email and password', 'error');
+                return;
+            }
+
+            try {
+                updateStatus('Signing in...', 'info');
+                const result = await signInWithEmailAndPassword(auth, email, password);
+                updateStatus('✅ Email sign in successful!', 'success');
+            } catch (error) {
+                updateStatus(`❌ Email sign in failed: ${error.message}`, 'error');
+                updateDebug({ error: error.code, message: error.message });
+            }
+        };
+
+        // Sign in with Google function
+        window.signInWithGoogle = async function() {
+            try {
+                updateStatus('Signing in with Google...', 'info');
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                updateStatus('✅ Google sign in successful!', 'success');
+                updateDebug({ 
+                    provider: 'Google',
+                    user: {
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL
+                    }
+                });
+            } catch (error) {
+                updateStatus(`❌ Google sign in failed: ${error.message}`, 'error');
+                updateDebug({ 
+                    error: error.code, 
+                    message: error.message,
+                    provider: 'Google'
+                });
+            }
+        };
+
+        // Create account function  
+        window.createAccount = async function() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                updateStatus('Please enter email and password', 'error');
+                return;
+            }
+
+            try {
+                updateStatus('Creating account...', 'info');
+                const result = await createUserWithEmailAndPassword(auth, email, password);
+                updateStatus('✅ Account created successfully!', 'success');
+            } catch (error) {
+                updateStatus(`❌ Account creation failed: ${error.message}`, 'error');
+                updateDebug({ error: error.code, message: error.message });
+            }
+        };
+
+        // Sign out function
+        window.signOut = async function() {
+            try {
+                await signOut(auth);
+                updateStatus('✅ Signed out successfully', 'success');
+            } catch (error) {
+                updateStatus(`❌ Sign out failed: ${error.message}`, 'error');
+            }
+        };
+
+        // Reset password function
+        window.resetPassword = async function() {
+            const email = document.getElementById('email').value;
+            
+            if (!email) {
+                updateStatus('Please enter email address', 'error');
+                return;
+            }
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                updateStatus('✅ Password reset email sent!', 'success');
+            } catch (error) {
+                updateStatus(`❌ Password reset failed: ${error.message}`, 'error');
+            }
+        };
+
+        // Test user function
+        window.testUser = function(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            signIn();
+        };
+
+        // Initialize
+        updateStatus('✅ Firebase initialized successfully', 'success');
+        updateDebug({ initialized: true, config: firebaseConfig });
+    </script>
+</body>
+</html>

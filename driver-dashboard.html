@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-truck text-2xl text-blue-300"></i>
+                    <h1 class="text-2xl font-bold">Lalalika Logistics</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <span id="driver-name" class="text-blue-300 font-semibold"></span>
+                    <button id="logout-btn" class="hover:text-blue-300 transition duration-300">Logout</button>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <span id="mobile-driver-name" class="block py-2 text-blue-300"></span>
+                <button id="mobile-logout-btn" class="block py-2 hover:text-blue-300 text-left w-full">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Sidebar -->
+            <div class="w-full md:w-1/4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="text-center mb-6">
+                        <div class="w-24 h-24 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <i class="fas fa-user text-4xl text-blue-600"></i>
+                        </div>
+                        <h2 class="text-xl font-semibold" id="driver-full-name">Driver Name</h2>
+                        <p class="text-gray-600" id="driver-email">driver@example.com</p>
+                    </div>
+                    <div class="space-y-4">
+                        <button id="assigned-tab" class="w-full text-left px-4 py-2 rounded-lg bg-blue-100 text-blue-700 font-medium">
+                            <i class="fas fa-box mr-2"></i> Assigned Deliveries
+                        </button>
+                        <button id="completed-tab" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-check-circle mr-2"></i> Completed Deliveries
+                        </button>
+                        <button id="reports-tab" class="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-flag mr-2"></i> Issue Reports
+                        </button>
+                        <button id="admin-dashboard-btn" class="w-full text-left px-4 py-2 rounded-lg border border-blue-100 text-blue-700 hover:bg-blue-50 hidden">
+                            <i class="fas fa-user-shield mr-2"></i> Admin Dashboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="w-full md:w-3/4">
+                <div id="notification" class="hidden mb-4 px-4 py-3 rounded-md"></div>
+                <!-- Assigned Deliveries -->
+                <div id="assigned-deliveries-section" class="space-y-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Assigned Deliveries</h2>
+                    </div>
+
+                    <div id="assigned-deliveries-list" class="space-y-4"></div>
+                </div>
+
+                <!-- Completed Deliveries -->
+                <div id="completed-deliveries-section" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Completed Deliveries</h2>
+                    </div>
+
+                    <div id="completed-deliveries-list" class="space-y-4"></div>
+                </div>
+
+                <!-- Issue Reports -->
+                <div id="issue-reports-section" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Issue Reports</h2>
+                        <button id="new-report-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold">
+                            <i class="fas fa-plus mr-2"></i>New Report
+                        </button>
+                    </div>
+
+                    <div id="reports-list" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Confirmation Modal -->
+    <div id="delivery-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="delivery-modal-title">Confirm Delivery</h3>
+                <button onclick="closeModal('delivery-modal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <p>Are you sure you want to mark this delivery as completed?</p>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Status</label>
+                    <select id="delivery-status" class="w-full p-2 border border-gray-300 rounded-md">
+                        <option value="delivered">Successfully Delivered</option>
+                        <option value="failed">Delivery Failed</option>
+                    </select>
+                </div>
+                <div class="mt-4" id="signature-section">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Recipient Signature</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-md p-4 text-center">
+                        <canvas id="signature-pad" class="w-full h-32 bg-gray-50"></canvas>
+                        <button id="clear-signature" class="mt-2 text-sm text-blue-600 hover:text-blue-800">Clear Signature</button>
+                    </div>
+                </div>
+                <div class="mt-4" id="failure-reason" style="display: none;">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Failure</label>
+                    <textarea id="failure-reason-text" rows="3" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Please specify the reason for delivery failure..."></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button onclick="closeModal('delivery-modal')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                </button>
+                <button onclick="confirmDelivery()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">New Issue Report</h3>
+                <button onclick="closeModal('report-modal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Delivery</label>
+                    <select id="report-delivery" class="w-full p-2 border border-gray-300 rounded-md">
+                        <option value="">Select a delivery</option>
+                        <!-- Delivery options will be populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Issue Type</label>
+                    <select id="issue-type" class="w-full p-2 border border-gray-300 rounded-md">
+                        <option value="traffic">Traffic Delay</option>
+                        <option value="vehicle">Vehicle Breakdown</option>
+                        <option value="package">Package Damage</option>
+                        <option value="recipient">Recipient Unavailable</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="issue-description" rows="4" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Please describe the issue in detail..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Upload Photo (Optional)</label>
+                    <div class="mt-1 flex items-center">
+                        <label class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50">
+                            <span>Choose File</span>
+                            <input id="issue-photo" type="file" class="hidden" accept="image/*">
+                        </label>
+                        <span id="file-name" class="ml-2 text-sm text-gray-500">No file chosen</span>
+                    </div>
+                    <div id="image-preview" class="mt-2 hidden">
+                        <img id="preview" class="h-32 w-auto rounded-md" alt="Preview">
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <input id="needs-assistance" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="needs-assistance" class="ml-2 block text-sm text-gray-700">
+                        I need immediate assistance
+                    </label>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end space-x-4">
+                <button onclick="closeModal('report-modal')" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                </button>
+                <button onclick="submitReport()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    Submit Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Report Modal -->
+    <div id="view-report-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="report-title">Issue Report</h3>
+                <button onclick="closeModal('view-report-modal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-500">Report ID</p>
+                        <p id="report-id" class="font-medium">-</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Date Reported</p>
+                        <p id="report-date" class="font-medium">-</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Delivery</p>
+                        <p id="report-delivery-id" class="font-medium">-</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Status</p>
+                        <p id="report-status" class="font-medium">-</p>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Issue Type</p>
+                    <p id="report-issue-type" class="font-medium">-</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Description</p>
+                    <p id="report-description" class="mt-1">-</p>
+                </div>
+                <div id="report-photo-container" class="hidden">
+                    <p class="text-sm text-gray-500 mb-2">Photo</p>
+                    <img id="report-photo" src="" alt="Report Photo" class="max-w-full h-auto rounded-md">
+                </div>
+                <div id="report-response" class="mt-4 p-4 bg-gray-50 rounded-md hidden">
+                    <p class="text-sm text-gray-500 mb-1">Admin Response</p>
+                    <p id="admin-response" class="text-gray-800">-</p>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeModal('view-report-modal')" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    Close
+                </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="./js/firebase-config.js"></script>
+    <script src="./js/auth-handler.js"></script>
+    <script src="./js/driver-dashboard.js"></script>
+</body>
+</html>

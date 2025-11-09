@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lalalika Logistics - Professional Logistics Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <!-- Your Firebase config -->
+    <script src="./js/firebase-config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <div id="navigation">
+        <!-- Navigation will be loaded here by loadNavigation() -->
+    </div>
+
+    <script>
+    // Function to load navigation
+    function loadNavigation() {
+        fetch('components/navigation.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navigation').innerHTML = html;
+                // After loading navigation, check auth state
+                checkAuthState();
+            })
+            .catch(error => {
+                console.error('Error loading navigation:', error);
+            });
+    }
+
+    // Check Firebase authentication state
+    function checkAuthState() {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in
+                console.log('User is signed in:', user.email);
+                // Update UI for logged in user
+                const userDisplay = document.getElementById('user-display');
+                if (userDisplay) {
+                    userDisplay.textContent = user.email || 'User';
+                }
+            } else {
+                // No user is signed in
+                console.log('No user is signed in');
+            }
+        });
+    }
+
+    // Test Firebase connection
+    function testFirebaseConnection() {
+        console.log('Testing Firebase connection...');
+        
+        // Test Database connection
+        const testRef = firebase.database().ref('.info/connected');
+        testRef.on('value', (snapshot) => {
+            if (snapshot.val() === true) {
+                console.log('Firebase Realtime Database is connected!');
+            } else {
+                console.log('Firebase Realtime Database is not connected');
+            }
+        });
+        
+        // Test Authentication
+        console.log('Firebase Auth is available:', !!firebase.auth);
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        loadNavigation();
+        testFirebaseConnection();
+        
+        // Check if user is already signed in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                console.log('User is already signed in:', user.email);
+            }
+        });
+    });
+    </script>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-5xl font-bold mb-6">Professional Logistics Solutions</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Track your shipments in real-time with Lalalika Logistics. We provide reliable, efficient, and secure logistics services across South Africa.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="track.html" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition duration-300">
+                    <i class="fas fa-search mr-2"></i>Track Your Order
+                </a>
+                <a href="contact.html" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-900 text-white px-8 py-3 rounded-lg font-semibold transition duration-300">
+                    <i class="fas fa-phone mr-2"></i>Get Quote
+                </a>
+                <a href="kiosk-dashboard.html" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-semibold transition duration-300 border-2 border-transparent">
+                    <i class="fas fa-store mr-2"></i>Kiosk Submission
+                </a>
+                <a href="admin-dashboard.html" class="bg-white text-blue-900 hover:bg-blue-50 px-8 py-3 rounded-lg font-semibold transition duration-300 border-2 border-transparent">
+                    <i class="fas fa-user-shield mr-2"></i>Admin Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Track Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-md mx-auto bg-gray-50 p-8 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Quick Track</h3>
+                <form id="quick-track-form" class="space-y-4">
+                    <div>
+                        <input type="text" id="tracking-number" placeholder="Enter tracking number (e.g., LLK123456789)" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition duration-300">
+                        <i class="fas fa-search mr-2"></i>Track Package
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center mb-12 text-gray-800">Why Choose Lalalika Logistics?</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-2xl text-blue-600"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-4">Real-Time Tracking</h4>
+                    <p class="text-gray-600">Monitor your shipments 24/7 with live GPS tracking and instant status updates.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-green-600"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-4">Secure & Reliable</h4>
+                    <p class="text-gray-600">Your packages are protected with comprehensive insurance and secure handling.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-truck text-2xl text-orange-600"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-4">Fast Delivery</h4>
+                    <p class="text-gray-600">Express delivery options with same-day and next-day delivery available.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-truck text-xl text-blue-400"></i>
+                        <h3 class="text-xl font-bold">Lalalika Logistics</h3>
+                    </div>
+                    <p class="text-gray-400">Professional logistics solutions across South Africa.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-white">Track Package</a></li>
+                        <li><a href="about.html" class="hover:text-white">About Us</a></li>
+                        <li><a href="news.html" class="hover:text-white">News & Updates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Express Delivery</li>
+                        <li>Standard Shipping</li>
+                        <li>International Freight</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-envelope mr-2"></i>admin@lalalika.co.za</p>
+                        <p><i class="fas fa-phone mr-2"></i>+27 123 456 789</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Johannesburg, South Africa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Lalalika Logistics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+    // Test Firebase connection
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Testing Firebase connection...");
+        
+        // Test if Firebase is loaded
+        if (typeof firebase === 'undefined') {
+            console.error("Firebase SDK not loaded!");
+            return;
+        }
+        
+        console.log("Firebase is loaded");
+        
+        // Test Database connection
+        const testRef = firebase.database().ref('.info/connected');
+        testRef.on('value', (snapshot) => {
+            if (snapshot.val() === true) {
+                console.log('✅ Firebase Realtime Database is connected!');
+            } else {
+                console.log('❌ Firebase Realtime Database is not connected');
+            }
+        });
+        
+        // Test Authentication
+        console.log("Firebase Auth available:", !!firebase.auth);
+        
+        // Test if user is logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                console.log('User is signed in:', user.email);
+            } else {
+                console.log('No user is signed in');
+            }
+        });
+    });
+</script>
+</body>
+</html>

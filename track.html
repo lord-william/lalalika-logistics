@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Package - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="./js/firebase-config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-truck text-2xl text-blue-300"></i>
+                    <h1 class="text-2xl font-bold">Lalalika Logistics</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-blue-300 transition duration-300">Home</a>
+                    <a href="about.html" class="hover:text-blue-300 transition duration-300">About</a>
+                    <a href="track.html" class="text-blue-300 font-semibold">Track Order</a>
+                    <a href="news.html" class="hover:text-blue-300 transition duration-300">News</a>
+                    <a href="contact.html" class="hover:text-blue-300 transition duration-300">Contact</a>
+                    <a href="login.html" class="hover:text-blue-300 transition duration-300">Login</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="index.html" class="block py-2 hover:text-blue-300">Home</a>
+                <a href="about.html" class="block py-2 hover:text-blue-300">About</a>
+                <a href="track.html" class="block py-2 text-blue-300">Track Order</a>
+                <a href="news.html" class="block py-2 hover:text-blue-300">News</a>
+                <a href="contact.html" class="block py-2 hover:text-blue-300">Contact</a>
+                <a href="login.html" class="block py-2 hover:text-blue-300">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">Track Your Package</h2>
+            <p class="text-xl max-w-2xl mx-auto">Enter your tracking number to get real-time updates on your shipment status and location</p>
+        </div>
+    </section>
+
+    <!-- Tracking Form -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Enter Tracking Information</h3>
+                    <form id="track-form" class="space-y-6">
+                        <div>
+                            <label for="track-input" class="block text-sm font-medium text-gray-700 mb-2">Tracking Number</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-barcode text-gray-400"></i>
+                                </div>
+                                <input type="text" id="track-input" name="trackingNumber" required
+                                       class="w-full pl-10 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                                       placeholder="Enter tracking number (e.g., LLK123456789)">
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Tracking numbers are usually 10-15 characters long and start with "LLK"
+                            </p>
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-lg font-semibold text-lg transition duration-300">
+                            <i class="fas fa-search mr-2"></i>Track Package
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Tracking Results -->
+    <section id="tracking-results" class="hidden py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto" id="results-content">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-3xl font-bold text-center mb-12 text-gray-800">How Our Tracking Works</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-search text-2xl text-blue-600"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-3">1. Enter Tracking Number</h4>
+                        <p class="text-gray-600">Simply enter your unique tracking number in the search box above.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-satellite-dish text-2xl text-green-600"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-3">2. Real-Time Updates</h4>
+                        <p class="text-gray-600">Our system provides live GPS tracking and status updates every 30 seconds.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-map-marker-alt text-2xl text-orange-600"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-3">3. View Location & Status</h4>
+                        <p class="text-gray-600">See your package's current location, delivery status, and estimated arrival time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-3xl font-bold text-center mb-12 text-gray-800">Tracking FAQ</h3>
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">How often is tracking information updated?</h4>
+                        <p class="text-gray-600">Our tracking system updates every 30 seconds when your package is in transit, providing you with the most current location and status information.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">What if my tracking number isn't working?</h4>
+                        <p class="text-gray-600">If your tracking number isn't found, please wait 24 hours after shipping as it may take time to appear in our system. If the issue persists, contact our support team.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Can I track multiple packages at once?</h4>
+                        <p class="text-gray-600">Currently, you can track one package at a time. For multiple packages, please enter each tracking number separately or contact our support for bulk tracking options.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-2">Do you send tracking notifications?</h4>
+                        <p class="text-gray-600">Yes! We send SMS and email notifications for major status updates including pickup, transit milestones, out for delivery, and successful delivery.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-truck text-xl text-blue-400"></i>
+                        <h3 class="text-xl font-bold">Lalalika Logistics</h3>
+                    </div>
+                    <p class="text-gray-400">Professional logistics solutions across South Africa.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-white">Home</a></li>
+                        <li><a href="about.html" class="hover:text-white">About Us</a></li>
+                        <li><a href="news.html" class="hover:text-white">News & Updates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Express Delivery</li>
+                        <li>Standard Shipping</li>
+                        <li>International Freight</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-envelope mr-2"></i>admin@lalalika.co.za</p>
+                        <p><i class="fas fa-phone mr-2"></i>+27 123 456 789</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Johannesburg, South Africa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Lalalika Logistics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        const trackForm = document.getElementById('track-form');
+        const submitBtn = trackForm?.querySelector('button[type="submit"]');
+        const trackingResults = document.getElementById('tracking-results');
+        const resultsContent = document.getElementById('results-content');
+        const trackInput = document.getElementById('track-input');
+        let unsubscribeShipmentListener = null;
+
+        function ensureFirebase() {
+            if (typeof firebase === 'undefined' || !firebase.apps.length) {
+                throw new Error('Firebase is not initialised. Please ensure firebase-config.js is loaded first.');
+            }
+            return {
+                database: firebase.database(),
+                auth: firebase.auth()
+            };
+        }
+
+        async function ensureAnonymousAuth(auth) {
+            if (!auth) {
+                throw new Error('Firebase auth service unavailable.');
+            }
+
+            if (auth.currentUser) {
+                return auth.currentUser;
+            }
+
+            try {
+                const credential = await auth.signInAnonymously();
+                return credential.user;
+            } catch (error) {
+                console.error('Anonymous authentication failed:', error);
+                throw new Error('Unable to connect securely. Please refresh the page and try again.');
+            }
+        }
+
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return '—';
+            const date = new Date(timestamp);
+            if (Number.isNaN(date.getTime())) {
+                return '—';
+            }
+            return date.toLocaleString();
+        }
+
+        const statusMap = {
+            pending: { label: 'Pending', color: 'yellow' },
+            pending_kiosk: { label: 'Pending (Kiosk)', color: 'yellow' },
+            picked_up: { label: 'Picked Up', color: 'blue' },
+            loaded_for_delivery: { label: 'Loaded for Delivery', color: 'indigo' },
+            out_for_delivery: { label: 'Out for Delivery', color: 'indigo' },
+            in_transit: { label: 'In Transit', color: 'blue' },
+            delivered: { label: 'Delivered', color: 'green' },
+            failed: { label: 'Delivery Failed', color: 'red' }
+        };
+
+        function normalizeTrackingNumber(value) {
+            return (value || '')
+                .toString()
+                .trim()
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, '');
+        }
+
+        function normaliseTimeline(rawTimeline) {
+            if (!rawTimeline) return [];
+
+            if (Array.isArray(rawTimeline)) {
+                return rawTimeline
+                    .filter(Boolean)
+                    .map((entry) => ({ ...entry }))
+                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            }
+
+            if (typeof rawTimeline === 'object') {
+                return Object.values(rawTimeline)
+                    .filter(Boolean)
+                    .map((entry) => ({ ...entry }))
+                    .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            }
+
+            return [];
+        }
+
+        async function fetchShipment(trackingNumber) {
+            const { database, auth } = ensureFirebase();
+            await ensureAnonymousAuth(auth);
+
+            const snapshot = await database
+                .ref('shipments')
+                .orderByChild('trackingNumber')
+                .equalTo(trackingNumber)
+                .limitToFirst(1)
+                .once('value');
+
+            if (!snapshot.exists()) {
+                return null;
+            }
+
+            const [key, value] = Object.entries(snapshot.val())[0];
+            return {
+                id: value.id || key,
+                ...value,
+                timeline: normaliseTimeline(value.timeline)
+            };
+        }
+
+        async function subscribeToShipmentUpdates(trackingNumber) {
+            if (unsubscribeShipmentListener) {
+                unsubscribeShipmentListener();
+                unsubscribeShipmentListener = null;
+            }
+
+            const { database, auth } = ensureFirebase();
+            await ensureAnonymousAuth(auth);
+
+            const shipmentsRef = database.ref('shipments');
+            const query = shipmentsRef
+                .orderByChild('trackingNumber')
+                .equalTo(trackingNumber)
+                .limitToFirst(1);
+
+            const handler = (snapshot) => {
+                if (!snapshot.exists()) {
+                    trackingResults.classList.add('hidden');
+                    return;
+                }
+
+                const [key, value] = Object.entries(snapshot.val())[0];
+                const shipment = {
+                    id: value.id || key,
+                    ...value,
+                    timeline: normaliseTimeline(value.timeline)
+                };
+
+                displayShipment(shipment);
+                trackingResults.classList.remove('hidden');
+            };
+
+            query.on('value', handler);
+            unsubscribeShipmentListener = () => query.off('value', handler);
+        }
+
+        async function handleTracking(rawTrackingNumber) {
+            const normalizedTracking = normalizeTrackingNumber(rawTrackingNumber);
+
+            if (!normalizedTracking) {
+                alert('Please enter a tracking number.');
+                return;
+            }
+
+            if (!normalizedTracking.startsWith('LLK')) {
+                alert('Tracking numbers should start with LLK. Please double-check the number and try again.');
+                return;
+            }
+
+            if (trackInput) {
+                trackInput.value = normalizedTracking;
+            }
+
+            const originalButtonContent = submitBtn?.innerHTML;
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Tracking...';
+            }
+
+            try {
+                const shipment = await fetchShipment(normalizedTracking);
+
+                if (!shipment) {
+                    trackingResults.classList.add('hidden');
+                    if (unsubscribeShipmentListener) {
+                        unsubscribeShipmentListener();
+                        unsubscribeShipmentListener = null;
+                    }
+                    alert('Tracking number not found. Please verify the number and try again.');
+                    return;
+                }
+
+                displayShipment(shipment);
+                trackingResults.classList.remove('hidden');
+                trackingResults.scrollIntoView({ behavior: 'smooth' });
+
+                await subscribeToShipmentUpdates(normalizedTracking);
+            } catch (error) {
+                console.error('Tracking error:', error);
+                alert(error.message || 'There was an error tracking your package. Please try again.');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalButtonContent || '<i class="fas fa-search mr-2"></i>Track Package';
+                }
+            }
+        }
+
+        if (trackForm) {
+            trackForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                await handleTracking(trackInput?.value || '');
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const trackingFromUrl = urlParams.get('number');
+        if (trackingFromUrl) {
+            const normalized = normalizeTrackingNumber(trackingFromUrl);
+            if (trackInput) {
+                trackInput.value = normalized;
+            }
+            if (normalized) {
+                setTimeout(() => {
+                    handleTracking(normalized);
+                }, 300);
+            }
+        }
+
+        function displayShipment(shipment) {
+            const statusInfo = statusMap[shipment.status] || { label: 'Status Unknown', color: 'gray' };
+            const timeline = shipment.timeline && shipment.timeline.length ? shipment.timeline : null;
+
+            const timelineHtml = timeline
+                ? timeline.map(entry => `
+                    <div class="flex items-start gap-4">
+                        <div class="mt-1">
+                            <i class="fas fa-circle text-${statusInfo.color}-500 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">${entry.label || entry.status || 'Status update'}</p>
+                            <p class="text-sm text-gray-600">${entry.actor ? `By: ${entry.actor}` : ''}</p>
+                            <p class="text-xs text-gray-500">${formatTimestamp(entry.timestamp)}</p>
+                        </div>
+                    </div>
+                `).join('')
+                : '<p class="text-sm text-gray-500">No status updates have been recorded yet. Please check back later.</p>';
+
+            resultsContent.innerHTML = `
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <h3 class="text-2xl font-bold text-gray-800">Package Status</h3>
+                        <span class="bg-${statusInfo.color}-100 text-${statusInfo.color}-800 px-4 py-2 rounded-full font-semibold">
+                            ${statusInfo.label}
+                        </span>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Tracking Number</p>
+                            <p class="font-semibold text-lg">${shipment.trackingNumber}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Last Updated</p>
+                            <p class="font-semibold text-lg">${formatTimestamp(shipment.updatedAt || shipment.createdAt)}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">Shipment Details</h4>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Sender</p>
+                            <p class="font-semibold">${shipment.sender?.name || '—'}</p>
+                            <p class="text-sm text-gray-600">${shipment.sender?.email || ''}</p>
+                            <p class="text-sm text-gray-600">${shipment.sender?.address || ''}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Recipient</p>
+                            <p class="font-semibold">${shipment.recipient?.name || '—'}</p>
+                            <p class="text-sm text-gray-600">${shipment.recipient?.email || ''}</p>
+                            <p class="text-sm text-gray-600">${shipment.recipient?.address || ''}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Package</p>
+                            <p class="font-semibold">${shipment.package?.description || '—'}</p>
+                            <p class="text-sm text-gray-600">Weight: ${shipment.package?.weight ? `${shipment.package.weight} kg` : '—'}</p>
+                            <p class="text-sm text-gray-600">Notes: ${shipment.package?.notes || '—'}</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Driver Assigned</p>
+                            <p class="font-semibold">${shipment.driverId ? shipment.driverId : 'Not assigned yet'}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Current Status</p>
+                            <p class="font-semibold text-${statusInfo.color}-600">${statusInfo.label}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4">Timeline</h4>
+                    <div class="space-y-4">
+                        ${timelineHtml}
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300">
+                        <i class="fas fa-bell mr-2"></i>Set Delivery Alerts
+                    </button>
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300">
+                        <i class="fas fa-share mr-2"></i>Share Tracking Info
+                    </button>
+                    <button onclick="window.print()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300">
+                        <i class="fas fa-print mr-2"></i>Print Details
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
