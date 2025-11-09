@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Label Generator - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-truck text-2xl text-blue-300"></i>
+                    <h1 class="text-2xl font-bold">Lalalika Logistics</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-blue-300 transition duration-300">Home</a>
+                    <a href="about.html" class="hover:text-blue-300 transition duration-300">About</a>
+                    <a href="track.html" class="hover:text-blue-300 transition duration-300">Track Order</a>
+                    <a href="news.html" class="hover:text-blue-300 transition duration-300">News</a>
+                    <a href="contact.html" class="hover:text-blue-300 transition duration-300">Contact</a>
+                    <a href="login.html" class="hover:text-blue-300 transition duration-300">Login</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="index.html" class="block py-2 hover:text-blue-300">Home</a>
+                <a href="about.html" class="block py-2 hover:text-blue-300">About</a>
+                <a href="track.html" class="block py-2 hover:text-blue-300">Track Order</a>
+                <a href="news.html" class="block py-2 hover:text-blue-300">News</a>
+                <a href="contact.html" class="block py-2 hover:text-blue-300">Contact</a>
+                <a href="login.html" class="block py-2 hover:text-blue-300">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <i class="fas fa-file-download text-5xl mb-4"></i>
+            <h2 class="text-4xl font-bold mb-4">Shipping Label Generator</h2>
+            <p class="text-xl max-w-2xl mx-auto">Create and download professional shipping labels</p>
+        </div>
+    </section>
+
+    <!-- Generator Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-xl p-8">
+                    <form id="label-form" class="space-y-6">
+                        <!-- Sender Information -->
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-gray-800">Sender Information</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                                    <input type="text" id="sender-name" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+                                    <input type="tel" id="sender-phone" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="+27 123 456 789">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
+                                    <input type="text" id="sender-address" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="123 Main Street">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                                    <input type="text" id="sender-city" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="Johannesburg">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code *</label>
+                                    <input type="text" id="sender-postal" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="2000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recipient Information -->
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-gray-800">Recipient Information</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+                                    <input type="text" id="recipient-name" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="Jane Smith">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
+                                    <input type="tel" id="recipient-phone" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="+27 987 654 321">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Address *</label>
+                                    <input type="text" id="recipient-address" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="456 Oak Avenue">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                                    <input type="text" id="recipient-city" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="Cape Town">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code *</label>
+                                    <input type="text" id="recipient-postal" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="8000">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Package Information -->
+                        <div>
+                            <h3 class="text-2xl font-bold mb-6 text-gray-800">Package Information</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                                    <input type="number" id="package-weight" step="0.1"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                           placeholder="5.0">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+                                    <select id="service-type"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                        <option value="standard">Standard Delivery</option>
+                                        <option value="express">Express Delivery</option>
+                                        <option value="sameday">Same Day Delivery</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Package Description</label>
+                                    <textarea id="package-description" rows="3"
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                              placeholder="Electronics, Books, Clothing, etc."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold text-lg transition duration-300">
+                            <i class="fas fa-file-alt mr-2"></i>Generate Shipping Label
+                        </button>
+                    </form>
+
+                    <!-- Label Preview -->
+                    <div id="label-preview" class="hidden mt-12">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">Label Preview</h3>
+                            <button onclick="downloadLabel()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-300">
+                                <i class="fas fa-download mr-2"></i>Download PDF
+                            </button>
+                        </div>
+                        
+                        <div id="shipping-label" class="bg-white border-4 border-gray-800 p-8 max-w-2xl mx-auto">
+                            <!-- Logo and Header -->
+                            <div class="text-center mb-6 border-b-2 border-gray-300 pb-6">
+                                <div class="flex items-center justify-center space-x-2 mb-2">
+                                    <i class="fas fa-truck text-3xl text-blue-600"></i>
+                                    <h1 class="text-3xl font-bold text-blue-900">Lalalika Logistics</h1>
+                                </div>
+                                <p class="text-sm text-gray-600">Professional Logistics Solutions</p>
+                            </div>
+
+                            <!-- Tracking Number -->
+                            <div class="text-center mb-6 bg-gray-100 p-4 rounded">
+                                <p class="text-sm font-semibold text-gray-700 mb-2">Tracking Number</p>
+                                <p class="text-2xl font-bold text-gray-900" id="label-tracking">LLK-XXXXXXXXX</p>
+                                <p class="text-sm text-gray-600 mt-2" id="label-date"></p>
+                            </div>
+
+                            <!-- From/To Information -->
+                            <div class="grid grid-cols-2 gap-6 mb-6">
+                                <div class="border-2 border-gray-300 p-4 rounded">
+                                    <h4 class="font-bold text-gray-900 mb-3 text-lg">FROM:</h4>
+                                    <p class="font-semibold text-gray-900" id="label-sender-name"></p>
+                                    <p class="text-sm text-gray-700" id="label-sender-address"></p>
+                                    <p class="text-sm text-gray-700" id="label-sender-city"></p>
+                                    <p class="text-sm font-semibold text-gray-900 mt-2" id="label-sender-phone"></p>
+                                </div>
+                                <div class="border-2 border-gray-300 p-4 rounded bg-yellow-50">
+                                    <h4 class="font-bold text-gray-900 mb-3 text-lg">TO:</h4>
+                                    <p class="font-semibold text-gray-900" id="label-recipient-name"></p>
+                                    <p class="text-sm text-gray-700" id="label-recipient-address"></p>
+                                    <p class="text-sm text-gray-700" id="label-recipient-city"></p>
+                                    <p class="text-sm font-semibold text-gray-900 mt-2" id="label-recipient-phone"></p>
+                                </div>
+                            </div>
+
+                            <!-- Package Details -->
+                            <div class="border-2 border-gray-300 p-4 rounded bg-blue-50 mb-6">
+                                <h4 class="font-bold text-gray-900 mb-3">Package Details</h4>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <span class="font-semibold">Weight:</span>
+                                        <span id="label-weight">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-semibold">Service:</span>
+                                        <span id="label-service">-</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-sm">
+                                    <span class="font-semibold">Description:</span>
+                                    <p id="label-description" class="text-gray-700">-</p>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="text-center text-xs text-gray-600 border-t-2 border-gray-300 pt-4">
+                                <p class="font-semibold mb-1">Scan for tracking updates</p>
+                                <p>admin@lalalika.co.za | +27 123 456 789</p>
+                                <p class="mt-1">www.lalalika-logistics.co.za</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-truck text-xl text-blue-400"></i>
+                        <h3 class="text-xl font-bold">Lalalika Logistics</h3>
+                    </div>
+                    <p class="text-gray-400">Professional logistics solutions across South Africa.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="track.html" class="hover:text-white">Track Package</a></li>
+                        <li><a href="about.html" class="hover:text-white">About Us</a></li>
+                        <li><a href="news.html" class="hover:text-white">News & Updates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Express Delivery</li>
+                        <li>Standard Shipping</li>
+                        <li>International Freight</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-envelope mr-2"></i>admin@lalalika.co.za</p>
+                        <p><i class="fas fa-phone mr-2"></i>+27 123 456 789</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Johannesburg, South Africa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Lalalika Logistics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Generate tracking number
+        function generateTrackingNumber() {
+            const prefix = 'LLK';
+            const random = Math.floor(Math.random() * 1000000000);
+            return `${prefix}${String(random).padStart(9, '0')}`;
+        }
+
+        // Label form handling
+        const form = document.getElementById('label-form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const senderName = document.getElementById('sender-name').value;
+            const senderPhone = document.getElementById('sender-phone').value;
+            const senderAddress = document.getElementById('sender-address').value;
+            const senderCity = document.getElementById('sender-city').value;
+            const senderPostal = document.getElementById('sender-postal').value;
+
+            const recipientName = document.getElementById('recipient-name').value;
+            const recipientPhone = document.getElementById('recipient-phone').value;
+            const recipientAddress = document.getElementById('recipient-address').value;
+            const recipientCity = document.getElementById('recipient-city').value;
+            const recipientPostal = document.getElementById('recipient-postal').value;
+
+            const weight = document.getElementById('package-weight').value || 'N/A';
+            const serviceType = document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
+            const description = document.getElementById('package-description').value || 'General Package';
+
+            // Generate tracking number
+            const trackingNumber = generateTrackingNumber();
+            const currentDate = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            // Populate label
+            document.getElementById('label-tracking').textContent = trackingNumber;
+            document.getElementById('label-date').textContent = currentDate;
+
+            document.getElementById('label-sender-name').textContent = senderName;
+            document.getElementById('label-sender-address').textContent = senderAddress;
+            document.getElementById('label-sender-city').textContent = `${senderCity}, ${senderPostal}`;
+            document.getElementById('label-sender-phone').textContent = senderPhone;
+
+            document.getElementById('label-recipient-name').textContent = recipientName;
+            document.getElementById('label-recipient-address').textContent = recipientAddress;
+            document.getElementById('label-recipient-city').textContent = `${recipientCity}, ${recipientPostal}`;
+            document.getElementById('label-recipient-phone').textContent = recipientPhone;
+
+            document.getElementById('label-weight').textContent = weight ? `${weight} kg` : 'N/A';
+            document.getElementById('label-service').textContent = serviceType;
+            document.getElementById('label-description').textContent = description;
+
+            // Show preview
+            document.getElementById('label-preview').classList.remove('hidden');
+            
+            // Scroll to preview
+            document.getElementById('label-preview').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Download label as image
+        function downloadLabel() {
+            const label = document.getElementById('shipping-label');
+            
+            html2canvas(label, {
+                scale: 2,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `shipping-label-${document.getElementById('label-tracking').textContent}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

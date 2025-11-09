@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Updates - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-truck text-2xl text-blue-300"></i>
+                    <h1 class="text-2xl font-bold">Lalalika Logistics</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-blue-300 transition duration-300">Home</a>
+                    <a href="about.html" class="hover:text-blue-300 transition duration-300">About</a>
+                    <a href="track.html" class="hover:text-blue-300 transition duration-300">Track Order</a>
+                    <a href="news.html" class="text-blue-300 font-semibold">News</a>
+                    <a href="contact.html" class="hover:text-blue-300 transition duration-300">Contact</a>
+                    <a href="login.html" class="hover:text-blue-300 transition duration-300">Login</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="index.html" class="block py-2 hover:text-blue-300">Home</a>
+                <a href="about.html" class="block py-2 hover:text-blue-300">About</a>
+                <a href="track.html" class="block py-2 hover:text-blue-300">Track Order</a>
+                <a href="news.html" class="block py-2 text-blue-300">News</a>
+                <a href="contact.html" class="block py-2 hover:text-blue-300">Contact</a>
+                <a href="login.html" class="block py-2 hover:text-blue-300">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">News & Updates</h2>
+            <p class="text-xl max-w-2xl mx-auto">Stay informed with the latest news, updates, and announcements from Lalalika Logistics</p>
+        </div>
+    </section>
+
+    <!-- Live Updates Banner -->
+    <section class="bg-green-600 text-white py-3">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-center space-x-2">
+                <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                <span class="text-sm font-medium">LIVE: Real-time updates enabled</span>
+                <i class="fas fa-satellite-dish text-sm"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Feed -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- Filter Tabs -->
+                <div class="mb-8">
+                    <div class="flex flex-wrap gap-2 justify-center">
+                        <button class="filter-btn active px-4 py-2 rounded-full bg-blue-600 text-white font-medium" data-filter="all">
+                            All Posts
+                        </button>
+                        <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="app">
+                            App Updates
+                        </button>
+                        <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="update">
+                            System Updates
+                        </button>
+                        <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="mobile">
+                            Mobile
+                        </button>
+                        <button class="filter-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300" data-filter="features">
+                            New Features
+                        </button>
+                    </div>
+                </div>
+
+                <!-- News Posts -->
+                <div id="news-feed" class="space-y-8">
+                    <!-- Loading indicator -->
+                    <div id="loading-indicator" class="text-center py-8">
+                        <i class="fas fa-spinner fa-spin text-2xl text-blue-600"></i>
+                        <p class="text-gray-600 mt-2">Loading latest news...</p>
+                    </div>
+                    
+                    <!-- No posts message (hidden by default) -->
+                    <div id="no-posts-message" class="text-center py-8 hidden">
+                        <i class="fas fa-newspaper text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600">No news posts available at the moment.</p>
+                    </div>
+
+                    <!-- Regular Posts -->
+                    <article class="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden news-post" data-tags="update,features">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">update</span>
+                                    <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">features</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                    <span><i class="fas fa-heart mr-1"></i>156</span>
+                                    <span><i class="fas fa-comment mr-1"></i>23</span>
+                                    <span><i class="fas fa-share mr-1"></i>8</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Enhanced Real-Time Tracking System</h3>
+                            <p class="text-gray-600 mb-4">Our new tracking system now provides GPS coordinates with 99.9% accuracy and updates every 30 seconds. Experience unprecedented visibility into your shipments.</p>
+                            <div class="hidden mb-4 text-gray-600" id="post-1-full">
+                                <p class="mb-3">This major upgrade includes:</p>
+                                <ul class="list-disc list-inside space-y-2 mb-3">
+                                    <li>Real-time GPS tracking with 99.9% accuracy</li>
+                                    <li>Updates every 30 seconds automatically</li>
+                                    <li>Interactive map view with route history</li>
+                                    <li>Estimated delivery time based on traffic conditions</li>
+                                    <li>SMS and email notifications for major status changes</li>
+                                </ul>
+                                <p>Our development team has worked tirelessly to ensure this system provides the most accurate and reliable tracking experience in the logistics industry.</p>
+                            </div>
+                            <div class="flex items-center justify-between text-sm text-gray-500">
+                                <span><i class="fas fa-calendar mr-2"></i>28 August 2025 at 14:22:15 UTC+2</span>
+                                <button onclick="togglePost('post-1')" class="text-blue-600 hover:text-blue-800 font-medium" id="post-1-btn">Read More</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden news-post" data-tags="app,mobile">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">app</span>
+                                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">mobile</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                    <span><i class="fas fa-heart mr-1"></i>89</span>
+                                    <span><i class="fas fa-comment mr-1"></i>12</span>
+                                    <span><i class="fas fa-share mr-1"></i>5</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Push Notifications Now Available</h3>
+                            <p class="text-gray-600 mb-4">Stay updated with instant push notifications for package status changes, delivery confirmations, and important alerts directly on your mobile device.</p>
+                            <div class="hidden mb-4 text-gray-600" id="post-2-full">
+                                <p class="mb-3">Push notification features include:</p>
+                                <ul class="list-disc list-inside space-y-2 mb-3">
+                                    <li>Instant alerts when package status changes</li>
+                                    <li>Delivery confirmation notifications</li>
+                                    <li>Customizable notification preferences</li>
+                                    <li>Priority alerts for urgent shipments</li>
+                                    <li>Driver proximity notifications (within 5km)</li>
+                                    <li>Delivery photo confirmations</li>
+                                </ul>
+                                <p>Enable push notifications in your mobile device settings to never miss an update about your shipments.</p>
+                            </div>
+                            <div class="flex items-center justify-between text-sm text-gray-500">
+                                <span><i class="fas fa-calendar mr-2"></i>27 August 2025 at 09:15:42 UTC+2</span>
+                                <button onclick="togglePost('post-2')" class="text-blue-600 hover:text-blue-800 font-medium" id="post-2-btn">Read More</button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden news-post" data-tags="update">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">update</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                    <span><i class="fas fa-heart mr-1"></i>67</span>
+                                    <span><i class="fas fa-comment mr-1"></i>8</span>
+                                    <span><i class="fas fa-share mr-1"></i>3</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">Website Performance Improvements</h3>
+                            <p class="text-gray-600 mb-4">We've optimized our website for faster loading times and improved user experience. Pages now load 40% faster with enhanced mobile responsiveness.</p>
+                            <div class="hidden mb-4 text-gray-600" id="post-3-full">
+                                <p class="mb-3">Performance improvements include:</p>
+                                <ul class="list-disc list-inside space-y-2 mb-3">
+                                    <li>40% faster page load times across all pages</li>
+                                    <li>Optimized images with WebP format support</li>
+                                    <li>Improved caching strategies</li>
+                                    <li>Enhanced mobile responsiveness on all devices</li>
+                                    <li>Reduced JavaScript bundle size by 30%</li>
+                                    <li>Better accessibility with WCAG 2.1 compliance</li>
+                                </ul>
+                                <p>These improvements ensure a smooth experience whether you're accessing our platform from desktop, tablet, or mobile devices.</p>
+                            </div>
+                            <div class="flex items-center justify-between text-sm text-gray-500">
+                                <span><i class="fas fa-calendar mr-2"></i>25 August 2025 at 16:45:28 UTC+2</span>
+                                <button onclick="togglePost('post-3')" class="text-blue-600 hover:text-blue-800 font-medium" id="post-3-btn">Read More</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-12">
+                    <button id="load-more" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition duration-300">
+                        <i class="fas fa-plus mr-2"></i>Load More Posts
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alerts Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-3xl font-bold text-center mb-12 text-gray-800">System Alerts & Notifications</h3>
+                <div class="space-y-4">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-green-800">All Systems Operational</h4>
+                                <p class="text-sm text-green-700">All logistics and tracking systems are running smoothly.</p>
+                            </div>
+                            <span class="ml-auto text-xs text-green-600">Live</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-truck text-xl text-blue-400"></i>
+                        <h3 class="text-xl font-bold">Lalalika Logistics</h3>
+                    </div>
+                    <p class="text-gray-400">Professional logistics solutions across South Africa.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="track.html" class="hover:text-white">Track Package</a></li>
+                        <li><a href="about.html" class="hover:text-white">About Us</a></li>
+                        <li><a href="news.html" class="hover:text-white">News & Updates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Express Delivery</li>
+                        <li>Standard Shipping</li>
+                        <li>International Freight</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-envelope mr-2"></i>admin@lalalika.co.za</p>
+                        <p><i class="fas fa-phone mr-2"></i>+27 123 456 789</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Johannesburg, South Africa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Lalalika Logistics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import firestoreHandler from '/js/firestore-handler.js';
+
+        // Toggle Read More functionality
+        window.togglePost = function(postId) {
+            const fullContent = document.getElementById(`${postId}-full`);
+            const button = document.getElementById(`${postId}-btn`);
+            
+            if (fullContent.classList.contains('hidden')) {
+                fullContent.classList.remove('hidden');
+                button.innerHTML = '<i class="fas fa-chevron-up mr-1"></i>Read Less';
+            } else {
+                fullContent.classList.add('hidden');
+                button.innerHTML = 'Read More';
+            }
+        };
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        let currentFilter = 'all';
+        let allPosts = [];
+
+        // Load news posts from Firestore
+        async function loadNewsPosts() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const noPostsMessage = document.getElementById('no-posts-message');
+            const newsFeed = document.getElementById('news-feed');
+            
+            try {
+                const result = await firestoreHandler.news.getNewsPosts(20, currentFilter);
+                
+                if (result.success && result.posts && result.posts.length > 0) {
+                    allPosts = result.posts;
+                    loadingIndicator.classList.add('hidden');
+                    
+                    // Clear existing dynamic posts
+                    const existingPosts = newsFeed.querySelectorAll('.dynamic-post');
+                    existingPosts.forEach(post => post.remove());
+                    
+                    // Add new posts
+                    result.posts.forEach(post => {
+                        const article = createPostElement(post);
+                        newsFeed.appendChild(article);
+                    });
+                    
+                    noPostsMessage.classList.add('hidden');
+                } else {
+                    loadingIndicator.classList.add('hidden');
+                    if (allPosts.length === 0) {
+                        noPostsMessage.classList.remove('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading news posts:', error);
+                loadingIndicator.classList.add('hidden');
+                if (allPosts.length === 0) {
+                    noPostsMessage.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Create post element from Firestore data
+        function createPostElement(post) {
+            const article = document.createElement('article');
+            article.className = 'bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden news-post dynamic-post';
+            article.dataset.tags = post.tags ? post.tags.join(',') : 'general';
+            
+            // Format timestamp
+            let formattedDate = 'Just now';
+            if (post.timestamp) {
+                const date = post.timestamp.seconds 
+                    ? new Date(post.timestamp.seconds * 1000)
+                    : new Date(post.timestamp);
+                formattedDate = date.toLocaleString('en-ZA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    timeZone: 'Africa/Johannesburg'
+                });
+            }
+            
+            // Build tags HTML
+            const tagsHTML = post.tags ? post.tags.map(tag => {
+                const colors = {
+                    'update': 'bg-green-100 text-green-800',
+                    'app': 'bg-blue-100 text-blue-800',
+                    'mobile': 'bg-purple-100 text-purple-800',
+                    'features': 'bg-orange-100 text-orange-800',
+                    'general': 'bg-gray-100 text-gray-800'
+                };
+                const colorClass = colors[tag] || 'bg-gray-100 text-gray-800';
+                return `<span class="${colorClass} text-xs px-2 py-1 rounded-full">${tag}</span>`;
+            }).join('') : '';
+            
+            article.innerHTML = `
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-2">
+                            ${tagsHTML}
+                        </div>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span><i class="fas fa-heart mr-1"></i>${post.likes || 0}</span>
+                            <span><i class="fas fa-comment mr-1"></i>${post.comments || 0}</span>
+                            <span><i class="fas fa-share mr-1"></i>${post.shares || 0}</span>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">${post.category || 'Update'}</h3>
+                    <p class="text-gray-600 mb-4">${post.content || 'No content available'}</p>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span><i class="fas fa-calendar mr-2"></i>${formattedDate}</span>
+                        <button class="text-blue-600 hover:text-blue-800 font-medium">Read More</button>
+                    </div>
+                </div>
+            `;
+            
+            return article;
+        }
+
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filter = this.dataset.filter;
+                currentFilter = filter;
+                
+                // Update active button
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-blue-600', 'text-white');
+                    b.classList.add('bg-gray-200', 'text-gray-700');
+                });
+                this.classList.add('active', 'bg-blue-600', 'text-white');
+                this.classList.remove('bg-gray-200', 'text-gray-700');
+                
+                // Filter posts
+                const newsPosts = document.querySelectorAll('.news-post');
+                newsPosts.forEach(post => {
+                    if (filter === 'all') {
+                        post.style.display = 'block';
+                    } else {
+                        const tags = post.dataset.tags || '';
+                        if (tags.includes(filter)) {
+                            post.style.display = 'block';
+                        } else {
+                            post.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Load more functionality
+        document.getElementById('load-more').addEventListener('click', function() {
+            const btn = this;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                const successMsg = document.createElement('div');
+                successMsg.className = 'bg-green-50 border border-green-200 rounded-lg p-4 mt-4';
+                successMsg.innerHTML = `
+                    <div class="flex items-center text-green-800">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        <span>All posts loaded! Check back later for new updates.</span>
+                    </div>
+                `;
+                btn.parentNode.appendChild(successMsg);
+                
+                setTimeout(() => {
+                    successMsg.remove();
+                }, 3000);
+            }, 1000);
+        });
+
+        // Initialize - Load news posts on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNewsPosts();
+        });
+    </script>
+</body>
+</html>

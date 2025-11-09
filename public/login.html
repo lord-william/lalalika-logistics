@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <div id="navigation">
+        <!-- Navigation will be loaded here by loadNavigation() -->
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="./js/firebase-config.js"></script>
+    <script src="./js/auth-handler.js"></script>
+
+    <script>
+    // Simple navigation loader
+    document.addEventListener('DOMContentLoaded', function() {
+        // This is a simplified navigation loader
+        // In a real app, you might want to load this from a file or use a framework
+        const navHtml = `
+            <nav class="bg-blue-900 text-white shadow-lg">
+                <div class="container mx-auto px-4">
+                    <div class="flex justify-between items-center py-4">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-truck text-2xl text-blue-300"></i>
+                            <h1 class="text-2xl font-bold">Lalalika Logistics</h1>
+                        </div>
+                        <div class="hidden md:flex items-center space-x-6">
+                            <a href="index.html" class="hover:text-blue-300">Home</a>
+                            <a href="about.html" class="hover:text-blue-300">About</a>
+                            <a href="track.html" class="hover:text-blue-300">Track Order</a>
+                            <a href="news.html" class="hover:text-blue-300">News</a>
+                            <a href="contact.html" class="hover:text-blue-300">Contact</a>
+                            <a href="login.html" class="text-blue-300">Login</a>
+                            <a href="driver-register.html" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                                <i class="fas fa-user-plus mr-1"></i> Driver Sign Up
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        `;
+        document.getElementById('navigation').innerHTML = navHtml;
+    });
+    </script>
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="index.html" class="block py-2 hover:text-blue-300">Home</a>
+                <a href="about.html" class="block py-2 hover:text-blue-300">About</a>
+                <a href="track.html" class="block py-2 hover:text-blue-300">Track Order</a>
+                <a href="news.html" class="block py-2 hover:text-blue-300">News</a>
+                <a href="contact.html" class="block py-2 hover:text-blue-300">Contact</a>
+                <a href="login.html" class="block py-2 text-blue-300">Login</a>
+                <a href="driver-register.html" class="block py-2 mt-2 bg-orange-500 hover:bg-orange-600 text-white px-4 rounded">
+                    <i class="fas fa-user-plus mr-2"></i>Driver Sign Up
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">Access Your Account</h2>
+            <p class="text-xl max-w-2xl mx-auto">Login to your dashboard or register as a new driver</p>
+        </div>
+    </section>
+
+    <!-- Simple Login Form -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Login to Your Account</h3>
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" id="email" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-sm font-medium text-gray-700">Password</label>
+                            <a href="#forgot-password" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+                        </div>
+                        <div class="relative">
+                            <input type="password" id="password" required
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <button type="button" id="toggle-password" class="absolute right-3 top-2.5 text-gray-500" onclick="togglePassword()">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember-me" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold transition duration-300">
+                        Login
+                    </button>
+
+                    <p class="text-sm text-gray-600 text-center">
+                        Don't have an account? 
+                        <a href="register.html" class="text-blue-600 hover:underline font-medium">Sign up</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-truck text-xl text-blue-400"></i>
+                        <h3 class="text-xl font-bold">Lalalika Logistics</h3>
+                    </div>
+                    <p class="text-gray-400">Professional logistics solutions across South Africa.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="track.html" class="hover:text-white">Track Package</a></li>
+                        <li><a href="about.html" class="hover:text-white">About Us</a></li>
+                        <li><a href="news.html" class="hover:text-white">News & Updates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Express Delivery</li>
+                        <li>Standard Shipping</li>
+                        <li>International Freight</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-envelope mr-2"></i>admin@lalalika.co.za</p>
+                        <p><i class="fas fa-phone mr-2"></i>+27 123 456 789</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Johannesburg, South Africa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Lalalika Logistics. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        const form = document.getElementById('login-form');
+        const toggleBtn = document.getElementById('toggle-password');
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            if (!passwordInput) return;
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.innerHTML = '<i class="far fa-eye-slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.innerHTML = '<i class="far fa-eye"></i>';
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showMessage('Please enter both email and password.', 'error');
+                return;
+            }
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Logging in...';
+
+            try {
+                if (!window.AuthHandler || !window.AuthHandler.loginDriver) {
+                    throw new Error('Authentication system not initialized. Please refresh the page.');
+                }
+
+                const { user, driverData } = await window.AuthHandler.loginDriver(email, password);
+
+                if (!driverData || driverData.status !== 'approved') {
+                    await firebase.auth().signOut();
+                    showMessage('Your account is not approved yet. Please contact the administrator.', 'error');
+                    return;
+                }
+
+                sessionStorage.setItem('driver_redirect', '1');
+                window.location.href = 'driver-dashboard.html';
+            } catch (error) {
+                console.error('Login error:', error);
+                handleLoginError(error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        function handleLoginError(error) {
+            let message = 'Login failed. Please try again.';
+
+            if (!error) {
+                showMessage(message, 'error');
+                return;
+            }
+
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    message = 'No account found with that email.';
+                    break;
+                case 'auth/wrong-password':
+                    message = 'Incorrect password.';
+                    break;
+                case 'auth/too-many-requests':
+                    message = 'Too many failed attempts. Please wait a moment and try again.';
+                    break;
+                case 'auth/network-request-failed':
+                    message = 'Network error. Check your connection and try again.';
+                    break;
+                default:
+                    message = error.message || message;
+            }
+
+            showMessage(message, 'error');
+        }
+
+        function showMessage(message, type = 'error') {
+            alert(message);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (form) {
+                form.addEventListener('submit', handleLogin);
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', togglePassword);
+            }
+
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (mobileMenu) {
+                        mobileMenu.classList.toggle('hidden');
+                    }
+                });
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

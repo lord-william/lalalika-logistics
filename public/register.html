@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Registration - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-blue-600">
+                            <i class="fas fa-truck mr-2"></i>Lalalika Logistics
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="/about" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    <a href="/admin" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Admin</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl w-full space-y-8">
+            <div>
+                <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-green-100">
+                    <i class="fas fa-user-plus text-green-600 text-xl"></i>
+                </div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    Driver Registration
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    Join our team of professional drivers
+                </p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <form id="driver-registration-form" class="space-y-6">
+                    <!-- Personal Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="relative">
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <input type="password" id="password" name="password" required minlength="6"
+                                   class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <button type="button" id="password-toggle" class="absolute inset-y-0 right-0 pr-3 flex items-center mt-7">
+                                <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6"
+                                   class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <button type="button" id="confirm-password-toggle" class="absolute inset-y-0 right-0 pr-3 flex items-center mt-7">
+                                <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Driver Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="licenseNumber" class="block text-sm font-medium text-gray-700 mb-2">Driver's License Number</label>
+                            <input type="text" id="licenseNumber" name="licenseNumber" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="experience" class="block text-sm font-medium text-gray-700 mb-2">Years of Experience</label>
+                            <select id="experience" name="experience" required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Select experience</option>
+                                <option value="0-1">0-1 years</option>
+                                <option value="2-5">2-5 years</option>
+                                <option value="6-10">6-10 years</option>
+                                <option value="10+">10+ years</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="vehicleType" class="block text-sm font-medium text-gray-700 mb-2">Vehicle Type</label>
+                            <select id="vehicleType" name="vehicleType" required
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Select vehicle type</option>
+                                <option value="van">Van</option>
+                                <option value="truck">Truck</option>
+                                <option value="motorcycle">Motorcycle</option>
+                                <option value="car">Car</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="vehicleRegistration" class="block text-sm font-medium text-gray-700 mb-2">Vehicle Registration</label>
+                            <input type="text" id="vehicleRegistration" name="vehicleRegistration" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Full Address</label>
+                        <textarea id="address" name="address" rows="3" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="Enter your complete address"></textarea>
+                    </div>
+
+                    <!-- Emergency Contact -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="emergencyName" class="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Name</label>
+                            <input type="text" id="emergencyName" name="emergencyName" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="emergencyPhone" class="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Phone</label>
+                            <input type="tel" id="emergencyPhone" name="emergencyPhone" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="flex items-start">
+                        <input type="checkbox" id="terms" name="terms" required
+                               class="mt-1 mr-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="terms" class="text-sm text-gray-700">
+                            I agree to the <a href="terms-conditions.html" target="_blank" class="text-blue-600 hover:text-blue-500">Terms and Conditions</a> 
+                            and <a href="privacy-policy.html" target="_blank" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium transition duration-300">
+                            <i class="fas fa-user-plus mr-2"></i>Register as Driver
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Login Link -->
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Already have an account? 
+                        <a href="/admin" class="text-blue-600 hover:text-blue-500 font-medium">Sign in here</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Why Join Lalalika Logistics?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-money-bill-wave text-green-500 mr-3"></i>
+                        <span class="text-sm text-gray-700">Competitive pay rates</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock text-blue-500 mr-3"></i>
+                        <span class="text-sm text-gray-700">Flexible working hours</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-purple-500 mr-3"></i>
+                        <span class="text-sm text-gray-700">Insurance coverage</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-mobile-alt text-orange-500 mr-3"></i>
+                        <span class="text-sm text-gray-700">Mobile app support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+    <script>
+    (function () {
+        const firebaseConfig = {
+            apiKey: "AIzaSyBBWaw-mdgC8KZ39uAdEDo6jQnbpy3r_h4",
+            authDomain: "lalalika-6d426.firebaseapp.com",
+            databaseURL: "https://lalalika-6d426-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "lalalika-6d426",
+            storageBucket: "lalalika-6d426.appspot.com",
+            messagingSenderId: "413657923851",
+            appId: "1:413657923851:web:36f94f8cbe3950dffaa20e"
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let auth;
+            let database;
+
+            try {
+                if (typeof firebase === 'undefined') {
+                    throw new Error('Firebase SDK failed to load');
+                }
+
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                    console.log('Firebase app initialized');
+                } else {
+                    console.log('Firebase app reused');
+                }
+
+                auth = firebase.auth();
+                database = firebase.database();
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                showMessage('Failed to load Firebase. Please refresh the page.', 'error');
+                return;
+            }
+
+            const form = document.getElementById('driver-registration-form');
+            if (!form) {
+                console.error('Driver registration form not found');
+                return;
+            }
+
+            setupPasswordToggle('password-toggle', 'password');
+            setupPasswordToggle('confirm-password-toggle', 'confirmPassword');
+
+            form.addEventListener('submit', (event) => handleRegistrationSubmit(event, auth, database));
+            console.log('Driver registration form ready');
+        });
+
+        function setupPasswordToggle(toggleId, inputId) {
+            const toggle = document.getElementById(toggleId);
+            const input = document.getElementById(inputId);
+
+            if (!toggle || !input) {
+                return;
+            }
+
+            toggle.addEventListener('click', () => {
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+                const icon = toggle.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-eye', !isPassword);
+                    icon.classList.toggle('fa-eye-slash', isPassword);
+                }
+            });
+        }
+
+        async function handleRegistrationSubmit(event, auth, database) {
+            event.preventDefault();
+
+            if (!auth || !database) {
+                showMessage('Firebase is not ready. Please refresh and try again.', 'error');
+                return;
+            }
+
+            const form = event.target;
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            if (form.password.value !== form.confirmPassword.value) {
+                showMessage('Passwords do not match!', 'error');
+                return;
+            }
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Registering...';
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(
+                    form.email.value,
+                    form.password.value
+                );
+
+                const user = userCredential.user;
+
+                const userData = {
+                    firstName: form.firstName.value,
+                    lastName: form.lastName.value,
+                    email: form.email.value,
+                    phone: form.phone.value,
+                    role: 'driver',
+                    status: 'pending',
+                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    driverInfo: {
+                        licenseNumber: form.licenseNumber.value,
+                        experience: form.experience.value,
+                        vehicleType: form.vehicleType.value,
+                        vehicleRegistration: form.vehicleRegistration.value,
+                        address: form.address.value,
+                        emergencyContact: {
+                            name: form.emergencyName.value,
+                            phone: form.emergencyPhone.value
+                        },
+                        status: 'pending'
+                    }
+                };
+
+                await database.ref(`users/${user.uid}`).set(userData);
+                await user.sendEmailVerification();
+                await auth.signOut();
+
+                showMessage('Registration successful! Please check your email to verify your account.', 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 3000);
+            } catch (error) {
+                console.error('Registration error:', error);
+                let errorMessage = 'Registration failed. ';
+
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage += 'This email is already registered.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage += 'Password should be at least 6 characters.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage += 'Invalid email address.';
+                        break;
+                    default:
+                        errorMessage += error.message;
+                        break;
+                }
+
+                showMessage(errorMessage, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        function showMessage(message, type = 'success') {
+            const existingToast = document.querySelector('.message-toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `message-toast fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            } text-white`;
+
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                    <span>${message}</span>
+                    <button class="ml-4 text-white hover:text-gray-200" type="button">&times;</button>
+                </div>
+            `;
+
+            toast.querySelector('button').addEventListener('click', () => toast.remove());
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 5000);
+        }
+    })();
+    </script>
+</body>
+</html>

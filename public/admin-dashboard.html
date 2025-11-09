@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Lalalika Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="./js/firebase-config.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-truck text-2xl text-blue-300"></i>
+                    <h1 class="text-2xl font-bold">Lalalika Logistics - Admin</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <button id="admin-driver-dashboard" class="hover:text-blue-300 transition duration-300">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Driver Dashboard
+                    </button>
+                    <button id="admin-logout" class="hover:text-blue-300 transition duration-300">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Statistics Cards -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Total Shipments</h3>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl font-bold text-blue-600" id="total-shipments">0</span>
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Active Deliveries</h3>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl font-bold text-green-600" id="active-deliveries">0</span>
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Issues Reported</h3>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl font-bold text-red-600" id="issues-reported">0</span>
+                    <div class="p-3 rounded-full bg-red-100 text-red-600">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-800">Pending Driver Applications</h2>
+                <div class="flex items-center space-x-3 text-sm text-gray-600">
+                    <span id="pending-drivers-count">0 pending</span>
+                    <button id="refresh-pending-drivers" class="text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="pending-drivers-body">
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">No pending driver applications.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-800">Recent Activity</h2>
+                <button id="refresh-activity" class="text-blue-600 hover:text-blue-800">
+                    <i class="fas fa-sync-alt mr-2"></i>Refresh
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="activity-list">
+                        <!-- Activity items will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Kiosk Shipments -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">Kiosk Shipments</h2>
+                    <p class="text-sm text-gray-500">Manage packages submitted via kiosk and dispatch them to drivers.</p>
+                </div>
+                <div class="flex items-center gap-3 text-sm text-gray-600">
+                    <span id="kiosk-shipments-count">0 awaiting action</span>
+                    <button id="refresh-kiosk-shipments" class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div id="kiosk-shipments-list" class="space-y-4">
+                <div class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
+                    No kiosk submissions pending at the moment.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (async function () {
+        const database = window.firebaseDatabase || firebase.database();
+        const auth = window.firebaseAuth || firebase.auth();
+
+        // DOM Elements
+        const totalShipmentsEl = document.getElementById('total-shipments');
+        const activeDeliveriesEl = document.getElementById('active-deliveries');
+        const issuesReportedEl = document.getElementById('issues-reported');
+        const activityListEl = document.getElementById('activity-list');
+        const refreshBtn = document.getElementById('refresh-activity');
+        const adminLogoutBtn = document.getElementById('admin-logout');
+        const adminDriverDashboardBtn = document.getElementById('admin-driver-dashboard');
+        const refreshPendingBtn = document.getElementById('refresh-pending-drivers');
+        const pendingDriversBody = document.getElementById('pending-drivers-body');
+        const pendingDriversCount = document.getElementById('pending-drivers-count');
+        const kioskShipmentsList = document.getElementById('kiosk-shipments-list');
+        const kioskShipmentsCount = document.getElementById('kiosk-shipments-count');
+        const refreshKioskShipmentsBtn = document.getElementById('refresh-kiosk-shipments');
+
+        let approvedDrivers = [];
+
+        try {
+            await ensureAuth();
+        } catch (error) {
+            console.error('Admin authentication failed:', error);
+            alert('Admin dashboard requires anonymous authentication. Enable Anonymous sign-in in Firebase Auth and refresh the page.');
+            return;
+        }
+
+        await loadApprovedDrivers();
+
+        async function loadKioskShipments() {
+            if (!kioskShipmentsList || !kioskShipmentsCount) {
+                return;
+            }
+
+            kioskShipmentsList.innerHTML = `
+                <div class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
+                    Loading kiosk submissions...
+                </div>
+            `;
+
+            try {
+                await loadApprovedDrivers();
+
+                const snapshot = await database.ref('shipments')
+                    .orderByChild('source')
+                    .equalTo('kiosk')
+                    .once('value');
+
+                if (!snapshot.exists()) {
+                    kioskShipmentsCount.textContent = '0 awaiting action';
+                    kioskShipmentsList.innerHTML = `
+                        <div class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
+                            No kiosk submissions pending at the moment.
+                        </div>
+                    `;
+                    return;
+                }
+
+                const actionableStatuses = new Set(['pending_kiosk', 'picked_up']);
+                const shipments = [];
+                snapshot.forEach(child => {
+                    const shipment = { id: child.key, ...(child.val() || {}) };
+                    const status = shipment.status || 'pending_kiosk';
+                    if (actionableStatuses.has(status)) {
+                        shipments.push(shipment);
+                    }
+                });
+
+                if (!shipments.length) {
+                    kioskShipmentsCount.textContent = '0 awaiting action';
+                    kioskShipmentsList.innerHTML = `
+                        <div class="rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
+                            All kiosk submissions have been processed.
+                        </div>
+                    `;
+                    return;
+                }
+
+                shipments.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+                kioskShipmentsCount.textContent = `${shipments.length} awaiting action`;
+
+                kioskShipmentsList.innerHTML = '';
+                shipments.forEach(shipment => kioskShipmentsList.appendChild(renderKioskShipmentCard(shipment)));
+                attachDriverSelectListeners();
+            } catch (error) {
+                console.error('Failed to load kiosk shipments:', error);
+                kioskShipmentsList.innerHTML = `
+                    <div class="rounded-lg border border-red-200 bg-red-50 p-6 text-center text-red-600">
+                        Unable to load kiosk submissions. Please try again.
+                    </div>
+                `;
+            }
+        }
+
+        function renderKioskShipmentCard(shipment) {
+            const {
+                id,
+                trackingNumber = 'N/A',
+                sender = {},
+                recipient = {},
+                package: packageInfo = {},
+                createdAt,
+                driverId
+            } = shipment;
+
+            const card = document.createElement('div');
+            card.className = 'rounded-lg border border-gray-200 bg-white p-6 shadow-sm';
+            card.dataset.id = id;
+
+            const createdLabel = createdAt ? new Date(createdAt).toLocaleString() : 'Unknown';
+            const weightLabel = packageInfo.weight ? `${packageInfo.weight} kg` : 'N/A';
+
+            card.innerHTML = `
+                <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+                    <div class="space-y-3">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">${trackingNumber}</h3>
+                            <p class="text-sm text-gray-500">Created: ${createdLabel}</p>
+                            ${driverId ? `<p class="text-xs font-semibold text-green-600">Assigned to ${getDriverLabel(driverId)}</p>` : ''}
+                        </div>
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div>
+                                <p class="text-xs font-semibold uppercase text-gray-500">Sender</p>
+                                <p class="text-sm text-gray-800">${formatNameAndEmail(sender)}</p>
+                                <p class="text-xs text-gray-500">${sender.phone || 'No phone'} • ${sender.address || 'No address'}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs font-semibold uppercase text-gray-500">Recipient</p>
+                                <p class="text-sm text-gray-800">${formatNameAndEmail(recipient)}</p>
+                                <p class="text-xs text-gray-500">${recipient.phone || 'No phone'} • ${recipient.address || 'No address'}</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-blue-700">
+                                <i class="fas fa-box mr-2"></i>${packageInfo.description || 'Package'}
+                            </span>
+                            <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1">
+                                <i class="fas fa-weight-hanging mr-2"></i>${weightLabel}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-stretch gap-3 md:w-60">
+                        <label class="text-xs font-semibold uppercase text-gray-500">Assign Driver</label>
+                        <select class="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" data-driver-select="${id}">
+                            <option value="">Select driver</option>
+                            ${renderDriverOptions(driverId)}
+                        </select>
+                        <button class="rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700" data-action="mark-picked-up" data-id="${id}">
+                            <i class="fas fa-box-open mr-2"></i>Mark Picked Up
+                        </button>
+                        <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700" data-action="mark-out-for-delivery" data-id="${id}">
+                            <i class="fas fa-truck-loading mr-2"></i>Mark Out for Delivery
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        async function updateShipmentStatus(shipmentId, currentStatus, nextStatus, activityDetails, extraUpdates = {}) {
+            try {
+                await ensureAuth();
+
+                const updates = {
+                    status: nextStatus,
+                    updatedAt: Date.now(),
+                    ...extraUpdates
+                };
+
+                const timelineEntry = {
+                    timestamp: Date.now(),
+                    status: nextStatus,
+                    label: activityDetails.timelineLabel,
+                    actor: 'admin'
+                };
+
+                const shipmentRef = database.ref(`shipments/${shipmentId}`);
+                const snapshot = await shipmentRef.once('value');
+
+                if (!snapshot.exists()) {
+                    throw new Error('Shipment no longer exists.');
+                }
+
+                const shipment = snapshot.val();
+                const timeline = Array.isArray(shipment.timeline) ? shipment.timeline.slice() : [];
+                timeline.push(timelineEntry);
+                updates.timeline = timeline;
+
+                await shipmentRef.update(updates);
+
+                await addActivityLog({
+                    type: 'shipment',
+                    status: nextStatus,
+                    details: activityDetails.logMessage,
+                    trackingNumber: shipment.trackingNumber || shipmentId,
+                    shipmentId
+                });
+
+                await loadKioskShipments();
+                loadDashboardData();
+            } catch (error) {
+                console.error('Failed to update shipment status:', error);
+                alert(error.message || 'Failed to update shipment. Please try again.');
+            }
+        }
+
+        function formatNameAndEmail(person = {}) {
+            const name = person.name || 'Unknown';
+            const email = person.email ? ` • ${person.email}` : '';
+            return `${name}${email}`;
+        }
+
+        // Initial load
+        loadDashboardData();
+        loadPendingDrivers();
+        loadRecentActivity();
+        loadKioskShipments();
+
+        // Load dashboard data
+        function loadDashboardData() {
+            const activeStatuses = new Set(['in_transit', 'out_for_delivery', 'loaded_for_delivery', 'picked_up']);
+
+            database.ref('shipments').once('value').then(snapshot => {
+                let total = 0;
+                let activeCount = 0;
+
+                snapshot.forEach(child => {
+                    total += 1;
+                    const status = child.val()?.status;
+                    if (activeStatuses.has(status)) {
+                        activeCount += 1;
+                    }
+                });
+
+                totalShipmentsEl.textContent = total;
+                activeDeliveriesEl.textContent = activeCount;
+            });
+
+            database.ref('reports')
+                .orderByChild('status')
+                .equalTo('open')
+                .once('value')
+                .then(snapshot => {
+                    issuesReportedEl.textContent = snapshot.numChildren();
+                });
+
+            // Load recent activity
+            loadRecentActivity();
+        }
+
+        // Load recent activity
+        function loadRecentActivity() {
+            const activityRef = database.ref('activity').orderByChild('timestamp').limitToLast(10);
+            
+            activityRef.once('value', (snapshot) => {
+                activityListEl.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    activityListEl.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">No recent activity</td></tr>';
+                    return;
+                }
+                
+                const activities = [];
+                snapshot.forEach((childSnapshot) => {
+                    activities.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                
+                // Sort by timestamp (newest first)
+                activities.sort((a, b) => b.timestamp - a.timestamp);
+                
+                // Display activities
+                activities.forEach(activity => {
+                    const row = document.createElement('tr');
+                    
+                    // Format timestamp
+                    const date = new Date(activity.timestamp);
+                    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const dateString = date.toLocaleDateString();
+                    
+                    // Set status color
+                    let statusClass = '';
+                    if (activity.status === 'completed') statusClass = 'bg-green-100 text-green-800';
+                    else if (activity.status === 'failed') statusClass = 'bg-red-100 text-red-800';
+                    else statusClass = 'bg-blue-100 text-blue-800';
+                    
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <i class="fas ${getActivityIcon(activity.type)} mr-2"></i>
+                                <span class="font-medium">${activity.type}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${activity.details}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-500">${dateString} ${timeString}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                                ${activity.status}
+                            </span>
+                        </td>
+                    `;
+                    
+                    activityListEl.appendChild(row);
+                });
+            });
+        }
+
+        // Load pending driver applications
+        function loadPendingDrivers() {
+            pendingDriversBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading pending drivers...</td></tr>';
+
+            database.ref('users').orderByChild('role').equalTo('driver').once('value')
+                .then(snapshot => {
+                    if (!snapshot.exists()) {
+                        pendingDriversBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">No drivers found.</td></tr>';
+                        pendingDriversCount.textContent = '0 pending';
+                        return;
+                    }
+
+                    const drivers = [];
+                    snapshot.forEach(child => {
+                        const driver = child.val();
+                        drivers.push({ uid: child.key, ...driver });
+                    });
+
+                    const pending = drivers.filter(driver => (driver.status || 'pending') === 'pending');
+                    pendingDriversCount.textContent = `${pending.length} pending`;
+
+                    if (!pending.length) {
+                        pendingDriversBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">No pending driver applications.</td></tr>';
+                        return;
+                    }
+
+                    pendingDriversBody.innerHTML = '';
+
+                    pending.forEach(driver => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">${driver.firstName || ''} ${driver.lastName || ''}</div>
+                                <div class="text-sm text-gray-500">Registered: ${formatTimestamp(driver.createdAt)}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">${driver.email || '—'}</div>
+                                <div class="text-sm text-gray-500">${driver.phone || ''}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${driver.driverInfo?.experience || '—'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ${driver.driverInfo?.vehicleType || '—'}
+                                ${driver.driverInfo?.vehicleRegistration ? `<div class="text-xs text-gray-400">${driver.driverInfo.vehicleRegistration}</div>` : ''}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                <button class="text-green-600 hover:text-green-800" data-action="approve" data-uid="${driver.uid}">
+                                    <i class="fas fa-check mr-1"></i>Approve
+                                </button>
+                                <button class="text-red-600 hover:text-red-800" data-action="reject" data-uid="${driver.uid}">
+                                    <i class="fas fa-times mr-1"></i>Reject
+                                </button>
+                            </td>
+                        `;
+                        pendingDriversBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading pending drivers:', error);
+                    pendingDriversBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load pending drivers.</td></tr>';
+                });
+        }
+
+        function formatTimestamp(ts) {
+            if (!ts) return '—';
+            const date = new Date(ts);
+            if (Number.isNaN(date.getTime())) {
+                return '—';
+            }
+            return date.toLocaleString();
+        }
+
+        async function handleDriverAction(uid, action) {
+            const newStatus = action === 'approve' ? 'approved' : 'rejected';
+            const updates = {
+                [`users/${uid}/status`]: newStatus,
+                [`users/${uid}/driverInfo/status`]: action === 'approve' ? 'active' : 'rejected'
+            };
+
+            try {
+                await ensureAuth();
+                await database.ref().update(updates);
+                loadPendingDrivers();
+                addActivityLog({
+                    type: 'user',
+                    details: `Driver ${newStatus}: ${uid}`,
+                    status: newStatus,
+                    timestamp: Date.now()
+                });
+            } catch (error) {
+                console.error('Failed to update driver status:', error);
+                alert('Unable to update driver status. Please try again.');
+            }
+        }
+
+        async function loadApprovedDrivers() {
+            try {
+                const snapshot = await database.ref('users').orderByChild('role').equalTo('driver').once('value');
+                approvedDrivers = [];
+
+                if (snapshot.exists()) {
+                    snapshot.forEach(child => {
+                        const driver = child.val() || {};
+                        if ((driver.status || driver.driverInfo?.status) === 'approved' || driver.driverInfo?.status === 'active') {
+                            approvedDrivers.push({
+                                id: child.key,
+                                name: `${driver.firstName || ''} ${driver.lastName || ''}`.trim() || driver.email || 'Driver',
+                                email: driver.email || '',
+                                phone: driver.phone || ''
+                            });
+                        }
+                    });
+                }
+
+                approvedDrivers.sort((a, b) => a.name.localeCompare(b.name));
+            } catch (error) {
+                console.error('Failed to load approved drivers:', error);
+                approvedDrivers = [];
+            }
+        }
+
+        function getDriverLabel(driverId) {
+            const driver = approvedDrivers.find(d => d.id === driverId);
+            if (!driver) return 'Unassigned';
+            return `${driver.name}${driver.phone ? ` (${driver.phone})` : ''}`;
+        }
+
+        function renderDriverOptions(selectedId) {
+            if (!approvedDrivers.length) {
+                return '<option value="" disabled>No approved drivers available</option>';
+            }
+
+            return approvedDrivers.map(driver => `
+                <option value="${driver.id}" ${selectedId === driver.id ? 'selected' : ''}>
+                    ${driver.name}${driver.phone ? ` (${driver.phone})` : ''}
+                </option>
+            `).join('');
+        }
+
+        function attachDriverSelectListeners() {
+            const selects = kioskShipmentsList?.querySelectorAll('select[data-driver-select]') || [];
+            selects.forEach(select => {
+                select.addEventListener('change', (event) => {
+                    const shipmentId = select.dataset.driverSelect;
+                    const driverId = event.target.value;
+
+                    if (!shipmentId) return;
+
+                    assignDriverToShipment(shipmentId, driverId);
+                });
+            });
+        }
+
+        async function assignDriverToShipment(shipmentId, driverId) {
+            try {
+                await ensureAuth();
+                await database.ref(`shipments/${shipmentId}`).update({
+                    driverId: driverId || null,
+                    updatedAt: Date.now(),
+                    driverAssignedAt: driverId ? Date.now() : null
+                });
+
+                await addActivityLog({
+                    type: 'shipment',
+                    status: 'driver_assigned',
+                    details: driverId ? `Driver assigned to shipment ${shipmentId}` : `Driver cleared for shipment ${shipmentId}`,
+                    shipmentId
+                });
+            } catch (error) {
+                console.error('Failed to assign driver:', error);
+                alert('Unable to assign driver. Please try again.');
+            }
+        }
+
+        function addActivityLog(activity) {
+            if (!activity.timestamp) {
+                activity.timestamp = Date.now();
+            }
+            database.ref('activity').push(activity).catch(err => console.error('Failed to log activity:', err));
+        }
+
+        async function ensureAuth() {
+            if (!auth) {
+                return;
+            }
+
+            if (auth.currentUser) {
+                return;
+            }
+
+            try {
+                await auth.signInAnonymously();
+            } catch (error) {
+                if (error.code === 'auth/operation-not-allowed') {
+                    console.error('Enable Anonymous sign-in in Firebase console.');
+                }
+                throw error;
+            }
+        }
+
+        // Get icon for activity type
+        function getActivityIcon(type) {
+            const icons = {
+                'delivery': 'fa-truck',
+                'issue': 'fa-exclamation-triangle',
+                'user': 'fa-user',
+                'system': 'fa-cog',
+                'notification': 'fa-bell'
+            };
+            return icons[type.toLowerCase()] || 'fa-info-circle';
+        }
+
+        // Event Listeners
+        refreshBtn.addEventListener('click', loadDashboardData);
+        refreshPendingBtn.addEventListener('click', loadPendingDrivers);
+        refreshKioskShipmentsBtn?.addEventListener('click', () => {
+            loadKioskShipments();
+        });
+
+        adminLogoutBtn.addEventListener('click', async () => {
+            try {
+                if (auth) {
+                    await auth.signOut();
+                }
+                window.location.href = 'driver-dashboard.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Failed to logout. Please try again.');
+            }
+        });
+
+        adminDriverDashboardBtn.addEventListener('click', () => {
+            window.location.href = 'driver-dashboard.html';
+        });
+        
+        pendingDriversBody.addEventListener('click', (event) => {
+            const target = event.target.closest('button[data-action]');
+            if (!target) return;
+
+            const { action, uid } = target.dataset;
+            if (!uid) return;
+
+            if (action === 'approve') {
+                handleDriverAction(uid, 'approve');
+            } else if (action === 'reject') {
+                handleDriverAction(uid, 'reject');
+            }
+        });
+
+        kioskShipmentsList?.addEventListener('click', (event) => {
+            const button = event.target.closest('button[data-action][data-id]');
+            if (!button) return;
+
+            const { action, id } = button.dataset;
+            if (!id) return;
+
+            const driverSelect = kioskShipmentsList.querySelector(`select[data-driver-select="${id}"]`);
+            const selectedDriver = driverSelect?.value || '';
+
+            if (action === 'mark-picked-up') {
+                updateShipmentStatus(id, 'pending_kiosk', 'picked_up', {
+                    timelineLabel: 'Package picked up from kiosk',
+                    logMessage: `Shipment ${id} picked up from kiosk`
+                }, {
+                    pickedUpAt: Date.now()
+                });
+            } else if (action === 'mark-out-for-delivery') {
+                if (!selectedDriver) {
+                    alert('Assign a driver before marking the package out for delivery.');
+                    return;
+                }
+
+                updateShipmentStatus(id, 'picked_up', 'out_for_delivery', {
+                    timelineLabel: 'Package dispatched for delivery',
+                    logMessage: `Shipment ${id} marked out for delivery`
+                }, {
+                    driverId: selectedDriver,
+                    dispatchedAt: Date.now()
+                });
+            }
+        });
+    })();
+    </script>
+</body>
+</html>
