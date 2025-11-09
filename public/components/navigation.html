@@ -1,0 +1,95 @@
+<!-- Navigation Component -->
+<!-- Vercel Analytics -->
+<script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+
+<nav class="bg-blue-900 text-white shadow-lg">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-truck text-2xl text-blue-300"></i>
+                <h1 class="text-2xl font-bold">Lalalika Logistics</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="index.html" class="hover:text-blue-300 transition duration-300">Home</a>
+                <a href="about.html" class="hover:text-blue-300 transition duration-300">About</a>
+                <a href="track.html" class="hover:text-blue-300 transition duration-300">Track Order</a>
+                <a href="news.html" class="hover:text-blue-300 transition duration-300">News</a>
+                <a href="contact.html" class="hover:text-blue-300 transition duration-300">Contact</a>
+                <!-- Admin link - will be shown only to admin users -->
+                <a href="admin.html" id="admin-nav-link" class="hidden bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm transition duration-300">
+                    <i class="fas fa-user-shield mr-1"></i> Admin
+                </a>
+                <div id="auth-buttons" class="flex items-center space-x-4">
+                    <a href="login.html" class="hover:text-blue-300 transition duration-300">Login</a>
+                    <a href="driver-register.html" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                        <i class="fas fa-user-plus mr-1"></i> Driver Sign Up
+                    </a>
+                </div>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-btn" class="text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden pb-4">
+            <a href="index.html" class="block py-2 hover:bg-blue-800 px-4 rounded">Home</a>
+            <a href="about.html" class="block py-2 hover:bg-blue-800 px-4 rounded">About</a>
+            <a href="track.html" class="block py-2 hover:bg-blue-800 px-4 rounded">Track Order</a>
+            <a href="news.html" class="block py-2 hover:bg-blue-800 px-4 rounded">News</a>
+            <a href="contact.html" class="block py-2 hover:bg-blue-800 px-4 rounded">Contact</a>
+            <a href="admin.html" id="mobile-admin-nav-link" class="hidden block py-2 hover:bg-red-700 px-4 rounded bg-red-600 text-white mt-2">
+                <i class="fas fa-user-shield mr-2"></i>Admin Dashboard
+            </a>
+            <a href="login.html" class="block py-2 hover:bg-blue-800 px-4 rounded">Login</a>
+            <a href="driver-register.html" class="block py-2 hover:bg-orange-700 bg-orange-600 text-white px-4 rounded mt-2">
+                <i class="fas fa-user-plus mr-2"></i>Driver Sign Up
+            </a>
+        </div>
+    </div>
+</nav>
+
+<script>
+// Check if user is admin and show/hide admin link
+function checkAdminAndUpdateNav() {
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    const adminNavLink = document.getElementById('admin-nav-link');
+    const mobileAdminNavLink = document.getElementById('mobile-admin-nav-link');
+    const authButtons = document.getElementById('auth-buttons');
+
+    if (userData.role === 'admin') {
+        if (adminNavLink) adminNavLink.classList.remove('hidden');
+        if (mobileAdminNavLink) mobileAdminNavLink.classList.remove('hidden');
+        
+        // Update auth buttons if user is logged in
+        if (authButtons) {
+            authButtons.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <span class="text-blue-200">${userData.email}</span>
+                    <button onclick="handleSignOut()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                        Sign Out
+                    </button>
+                </div>
+            `;
+        }
+    } else {
+        if (adminNavLink) adminNavLink.classList.add('hidden');
+        if (mobileAdminNavLink) mobileAdminNavLink.classList.add('hidden');
+    }
+}
+
+// Handle sign out
+function handleSignOut() {
+    // Clear local storage
+    localStorage.removeItem('user');
+    // Redirect to home page
+    window.location.href = 'index.html';
+}
+
+// Check admin status when the page loads
+document.addEventListener('DOMContentLoaded', checkAdminAndUpdateNav);
+</script>
